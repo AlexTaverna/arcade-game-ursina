@@ -18,7 +18,7 @@ class Player(Sprite):
         self.HP=100
         self.texture=texures[0]
         self.hidden=False
-        self.mobility=10
+        self.mobility=7
         self.collider = 'box'
         self.shadow=Sprite(model="quad",texture="P38_shadow.png",scale=(0.5,0.5))   
 player=Player()
@@ -39,11 +39,11 @@ class Cloud(Sprite):
         super().__init__()
         self.model="cube"
         self.scale = (randint(4,15),randint(4,15),5)
-        self.position = (randint(-35,+35),randint(25,200),-1.7)
+        self.position = (randint(-30,+30),randint(25,140),-1.7)
         self.rotation = (0,0,randint(0,360))
         self.texture=cloudTexture[randint(0,3)]
         self.collider = 'box'
-        self.speed=2
+        self.speed=4
 clouds = []
 for i in range(1):
     cloud=Cloud()
