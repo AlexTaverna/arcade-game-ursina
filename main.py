@@ -34,7 +34,7 @@ def update():
 
     
 
-    print_on_screen( "DAMEGE: "+str(player.HP), position=(-0.8,-0.4), origin=(0,0),duration=0.1)     
+    print_on_screen( "DAMAGE: "+str(player.HP), position=(-0.8,-0.4), origin=(0,0),duration=0.1)     
 
     playerSpeed = (mouse.position*camera.fov - player.position)*player.mobility
     player.rotation_y = clamp(playerSpeed.x*-2, -50 ,50)
