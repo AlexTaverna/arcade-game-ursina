@@ -10,7 +10,7 @@ from Enemy import *
 
 texures=["P38_lvl_1_d0.png","P38_lvl_1_d1.png","P38_lvl_1_d2.png","P38_lvl_1_d3.png","P38_lvl_1_d4.png"] 
 
-left_prop=Entity(model='cube', color=color.gray,scale=(1,.08,.08))
+left_prop=Entity(model='cube', color=color.gray,scale=(.9,.07,.07))
 right_prop=duplicate(left_prop)
 
 
@@ -19,17 +19,22 @@ class Player(Entity):
     def __init__(self):
         super().__init__()
         self.model="quad"
-        self.scale = 5
+        self.scale = 4
         self.hp=100
-        self.mobility=3
+        self.mobility=5
         self.primary_cooldown=False
         self.secondary_cooldown=False 
         self.set_sprite()
         self.position_z= 2
         self.always_on_top = 2
+        self.hit_zone = self.scale/2
         self.bullet_renderer = Entity(model=Mesh(mode='point', thickness=.2), texture='circle', color=color.yellow)
-        
-        
+       
+    
+    def kill(self):
+        self.disable()
+        destroy(left_prop)
+        destroy(right_prop)            
         
     def set_sprite(self):
         if self.hp >= 80:
@@ -52,7 +57,7 @@ class Player(Entity):
             invoke(setattr,self, 'primary_cooldown', False, delay=.15)
             self.bullet_renderer.model.vertices.append(self.position + (0,2))
 
-            
+    
 
     def update(self):
         playerSpeed = (mouse.position*camera.fov - self.position)*self.mobility
@@ -62,18 +67,22 @@ class Player(Entity):
         
         
         left_prop.rotate((0,40* time.dt,0), relative_to=None)
-        left_prop.position=(self.position+(-0.75   ,1.65,-0.1))
+        left_prop.position=(self.position+(-0.6,1.3,-0.1))
 
         right_prop.rotate((0,-40* time.dt,0), relative_to=None)
-        right_prop.position=(self.position+(0.75,1.65,-0.1))  
+        right_prop.position=(self.position+(0.6,1.3,-0.1))  
 
         if held_keys['left mouse']:
             self.shoot_primary()
 
-        self.bullet_renderer.model.generate()
 
         for i, bullet in enumerate(self.bullet_renderer.model.vertices):
-            self.bullet_renderer.model.vertices[i] += Vec3(0, time.dt * 20, 0)
+            bullet += Vec3(0, time.dt * 20, 0)
+            if bullet.y>25:
+                self.bullet_renderer.model.vertices.remove(bullet)   
+         
+        self.bullet_renderer.model.generate() 
+        
         
      
          
